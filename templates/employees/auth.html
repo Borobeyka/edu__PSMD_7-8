@@ -1,0 +1,28 @@
+{% extends "/main.html" %}
+
+{% block title %}
+    Авторизация
+{% endblock %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+
+    {% for category, message in get_flashed_messages(True) %}
+        <div class="alert alert-{{category}}">{{ message }}</div>  
+    {% endfor %}
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>    
+                {% endfor %}
+            {% endif %}
+            <p>{{ field.label() }} {{ field() }}</p>
+        {% endfor %}
+        {{ form.submit() }}
+    </form>
+{% endblock %}

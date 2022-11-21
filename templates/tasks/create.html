@@ -1,0 +1,25 @@
+{% extends "/main.html" %}
+
+{% block title %}
+    Создание задания
+{% endblock %}
+
+{% block content %}
+    Добро пожаловать, <b>{{ user.get("name") }} {{ user.get("surname") }}</b> ({{ user.get("role_title") }})!
+    <a type="button" class="btn btn-danger btn-sm" href="{{ url_for('employees_logout') }}">Выйти из системы</a>
+    <h1>Создание задания</h1>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>    
+                {% endfor %}
+            {% endif %}
+            <p>{{ field.label() }} {{ field() }}</p>
+        {% endfor %}
+        {{ form.submit() }}
+    </form>
+{% endblock %}

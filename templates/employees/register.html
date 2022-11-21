@@ -1,0 +1,24 @@
+{% extends "/main.html" %}
+
+{% block title %}
+    Регистрация работника
+{% endblock %}
+
+{% block content %}
+    <h1>Регистрация нового работника</h1>
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>    
+                {% endfor %}
+            {% endif %}
+            <p>{{ field.label() }} {{ field() }}</p>
+        {% endfor %}
+        {{ form.submit() }}
+    </form>
+{% endblock %}

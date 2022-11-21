@@ -1,0 +1,59 @@
+{% extends "/main.html" %}
+
+{% block title %}
+    Отчетность по задачам
+{% endblock %}
+
+{% block content %}
+    Добро пожаловать, <b>{{ user.get("name") }} {{ user.get("surname") }}</b> ({{ user.get("role_title") }})!
+    <a type="button" class="btn btn-danger btn-sm" href="{{ url_for('employees_logout') }}">Выйти из системы</a>
+    {% for category, message in get_flashed_messages(True) %}
+        <div class="alert alert-{{category}}">{{ message }}</div>  
+    {% endfor %}
+    
+    <h1>Отчеты по заданиям</h1>
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>    
+                {% endfor %}
+            {% endif %}
+            <p>{{ field.label() }} {{ field() }}</p>
+        {% endfor %}
+        {{ form.submit() }}
+    </form>
+
+    {% if report %} 
+        {% for task in report %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ task.title }}</h5>
+                    <p>Дата начала: <b>{{task.start_date}}</b></p>
+                    <p>Планируемая дата завершения: <b>{{ task.planned_date }}</b></p>
+                    <p>Фактическая дата завершения: <b>{{ task.expire_date }}</b></p>
+                    <p>Автор: <b>{{task.author_name }} {{ task.author_surname }}</b></p>
+                    <p>Исполнитель: <b>{{task.executor_name }} {{ task.executor_surname }}</b></p>
+                    <p>Клиент: <b>{{task.client_name }} {{ task.client_surname }}</b></p>
+                    <p>Приоритет задания: <b>{{task.task_priority }}</b></p>
+                    <p>Тип задания: <b>{{task.task_type }}</b></p>
+                    {% if task.contract_description != None %}
+                        <p>Контракт: <b>{{task.contract_description }}</b></p>
+                        <p>Тип контракта: <b>{{task.contract_type }}</b></p>
+                    {% endif %}
+                    <p>Статус задания:
+                    {% if task.completed %}
+                        <b>Завершено</b></p>
+                    {% else %}
+                        <b>Актуально</b></p>
+                    {% endif %}
+                    <a href="{{ url_for('tasks_show', task_id=task.id) }}" class="btn btn-info">Перейти к заданию</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
