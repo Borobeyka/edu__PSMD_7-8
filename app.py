@@ -19,6 +19,8 @@ login_manager.login_view = "employees_auth"
 login_manager.login_message = "Авторизируйтесь для доступа ко всем страницам"
 login_manager.login_message_category = "danger"
 
+print(generate_password_hash("333"))
+
 @login_manager.user_loader
 def load_user(user_id):
     return UserLogin().fromDB(user_id, db)
